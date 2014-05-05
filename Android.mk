@@ -31,10 +31,18 @@ LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 # the libraries in the APK, otherwise just put them in /system/lib and
 # leave them out of the APK
 ifneq (,$(TARGET_BUILD_APPS))
-  LOCAL_JNI_SHARED_LIBRARIES := libjni_mosaic libjni_tinyplanet
+ifeq ($(USE_GMS_LIBS),true)
+	LOCAL_JNI_SHARED_LIBRARIES := libjni_mosaic libjni_tinyplanet_old
 else
-  LOCAL_REQUIRED_MODULES := libjni_mosaic libjni_tinyplanet
+	LOCAL_JNI_SHARED_LIBRARIES := libjni_mosaic libjni_tinyplanet
 endif
+else   # TARGET_BUILD_APPS
+ifeq ($(USE_GMS_LIBS),true)
+	LOCAL_REQUIRED_MODULES := libjni_mosaic libjni_tinyplanet_old
+else
+	LOCAL_REQUIRED_MODULES := libjni_mosaic libjni_tinyplanet
+endif
+endif # TARGET_BUILD_APPS
 
 include $(BUILD_PACKAGE)
 
